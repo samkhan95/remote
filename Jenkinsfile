@@ -1,14 +1,31 @@
-node{
-    stage("SCM Checkout"){
-        git 'https://github.com/samkhan95/html_css_project.git'
+
+pipeline{
+    agent {label "linux"}
+    options {
+        buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '5', daysToKeepStr: '', numToKeepStr: '5')
+        disableConcurrentBuilds()
     }
-    stage("Building"){
-        echo 'building the project'
-    }
-     stage("Test"){
-      echo 'Testing the app'
-    }
-    stage("Deploy"){
-       echo 'deploying the app'
+    stages{
+        stage("Hello"){
+            steps{
+                echo "hello"
+            }
+        }
+//         stage("for the fix branch"){
+//             when{
+//                 branch "fix-*"
+//             }
+//             steps {
+//                 echo "Execute for fix branch"
+//             }
+//         }
+        stage("for the PR"){
+            when{
+                branch 'PR-*'
+            }
+            steps {
+                echo "this only runs for PRs"
+            }
+        }
     }
 }
